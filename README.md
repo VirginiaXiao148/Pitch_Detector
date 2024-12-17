@@ -44,7 +44,7 @@ Generate sheet music in MusicXML format
 
 This is a basic implementation and has some limitations:
 
-It works best with single-note melodies
-It might not perfectly capture rhythm and timing
-Very fast passages might not be accurately transcribed
-Complex harmonies might not be properly detected
+- It works best with single-note melodies
+- It might not perfectly capture rhythm and timing
+- Very fast passages might not be accurately transcribed
+- Complex harmonies might not be properly detected
