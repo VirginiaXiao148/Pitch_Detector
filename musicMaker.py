@@ -48,7 +48,7 @@ class MusicTranscriber:
         for frame in onset_frames:
             index = magnitudes[:, frame].argmax()
             pitch = pitches[index, frame]
-            if pitch > 0:
+            if pitch > 0 and np.isfinite(pitch):
                 pitches_found.append(pitch)
                 
         return pitches_found
@@ -94,12 +94,15 @@ class MusicTranscriber:
         # 1. Load audio file
         sr_original, audio_data = audio_file
         
+        # Transform to float32
+        audio_data_float = librosa.util.buf_to_float(audio_data)
+        
         # 2. Resample if necessary
         if sr_original != self.sample_rate:
-            audio_data = librosa.resample(y=audio_data.astype(float), orig_sr=sr_original, target_sr=self.sample_rate)
+            audio_data_float = librosa.resample(y=audio_data_float, orig_sr=sr_original, target_sr=self.sample_rate)
             
         # 3. Process audio to get pitches
-        pitches = self.process_audio(audio_data)
+        pitches = self.process_audio(audio_data_float)
         
         if pitches is None or len(pitches) == 0:
             print("No pitches detected in the audio file.")
