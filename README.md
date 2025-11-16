@@ -21,7 +21,7 @@ python musicMaker.py
 ## Notes
 - The transcription works best with clear, single-note melodies
 - Make sure your microphone is properly configured
-- The default recording duration is 5 seconds (can be modified in the code)
+- To see the results, open the generated MusicXML file in your preferred sheet music software or use an online MusicXML viewer as SoundSlice
 
 ## Limitations
 - It works best with single-note melodies
