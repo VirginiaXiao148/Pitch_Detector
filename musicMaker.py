@@ -86,40 +86,44 @@ class MusicTranscriber:
     
     def transcribe_from_file(self, audio_file):
         
-        
-        if audio_file is None:
-            print("No audio file provided.")
-            return
-        
-        # 1. Load audio file
-        sr_original, audio_data = audio_file
-        
-        # Transform to float32
-        audio_data_float = librosa.util.buf_to_float(audio_data)
-        
-        # 2. Resample if necessary
-        if sr_original != self.sample_rate:
-            audio_data_float = librosa.resample(y=audio_data_float, orig_sr=sr_original, target_sr=self.sample_rate)
+        try:
+            if audio_file is None:
+                print("No audio file provided.")
+                return
             
-        # 3. Process audio to get pitches
-        pitches = self.process_audio(audio_data_float)
-        
-        if pitches is None or len(pitches) == 0:
-            print("No pitches detected in the audio file.")
-            return
-        
-        # 4. Create sheet music
-        stream = self.create_sheet_music(pitches)
-        # 5. Save sheet music
-        output_filename = "output_sheet_music.xml"
-        self.save_sheet_music(stream, filename=output_filename)
+            # 1. Load audio file
+            sr_original, audio_data = audio_file
+            
+            # Transform to float32
+            audio_data_float = librosa.util.buf_to_float(audio_data)
+            
+            # 2. Resample if necessary
+            if sr_original != self.sample_rate:
+                audio_data_float = librosa.resample(y=audio_data_float, orig_sr=sr_original, target_sr=self.sample_rate)
+                
+            # 3. Process audio to get pitches
+            pitches = self.process_audio(audio_data_float)
+            
+            if pitches is None or len(pitches) == 0:
+                print("No pitches detected in the audio file.")
+                return
+            
+            # 4. Create sheet music
+            stream = self.create_sheet_music(pitches)
+            # 5. Save sheet music
+            output_filename = "output_sheet_music.xml"
+            self.save_sheet_music(stream, filename=output_filename)
 
-        # 6. Read XML file
-        with open(output_filename, "r", encoding="utf-8") as f:
-            xml_content = f.read()
+            # 6. Read XML file
+            with open(output_filename, "r", encoding="utf-8") as f:
+                xml_content = f.read()
+            
+            # 7. Return the output filename for GUI display
+            return f"Transcriptión completed. {len(pitches)} detected pitchs.", output_filename, xml_content
         
-        # 7. Return the output filename for GUI display
-        return f"Transcriptión completed. {len(pitches)} detected pitchs.", output_filename, xml_content
+        except Exception as e:
+            print(f"An error occurred during transcription: {e}")
+            return f"An error occurred: {e}", None, None
     
     def save_wav(self, audio_data, filename="output.wav"):
         """
