@@ -48,7 +48,7 @@ class MusicTranscriber:
         for frame in onset_frames:
             index = magnitudes[:, frame].argmax()
             pitch = pitches[index, frame]
-            if pitch > 0 and np.isfinite(pitch):
+            if pitch > 250 and pitch < 3000 and np.isfinite(pitch):
                 pitches_found.append(pitch)
                 
         return pitches_found
