@@ -113,9 +113,13 @@ class MusicTranscriber:
         # 5. Save sheet music
         output_filename = "output_sheet_music.xml"
         self.save_sheet_music(stream, filename=output_filename)
+
+        # 6. Read XML file
+        with open(output_filename, "r", encoding="utf-8") as f:
+            xml_content = f.read()
         
-        # 6. Return the output filename for GUI display
-        return f"Transcripción completada. {len(pitches)} notas detectadas.", output_filename
+        # 7. Return the output filename for GUI display
+        return f"Transcriptión completed. {len(pitches)} detected pitchs.", output_filename, xml_content
     
     def save_wav(self, audio_data, filename="output.wav"):
         """
