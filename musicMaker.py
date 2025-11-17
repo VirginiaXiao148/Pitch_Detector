@@ -165,7 +165,8 @@ app = gr.Interface(
     
     outputs=[
         gr.Textbox(label="Result"),
-        gr.File(label="Download sheet music (MusicXML)")
+        gr.File(label="Download sheet music (MusicXML)"),
+        gr.Code(label="Sheet Music (MusicXML Content)")
     ],
     
     title="Music Transcriber",
