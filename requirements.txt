@@ -1,3 +1,4 @@
-librosa==0.10.1
-numpy==1.24.3
-music21==9.1.0
+gradio
+librosa
+numpy
+music21
