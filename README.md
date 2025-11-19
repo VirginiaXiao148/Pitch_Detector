@@ -12,7 +12,7 @@ Tool made with Python for musicians and composers that automates the process of 
 - Simple Gradio web GUI (subir archivo o grabar desde micrófono)
 - Monophonic focus (melody; rhythm exported uniformly as eighth notes)
 - WAV/MP3 input (handled by Gradio; resample automático)
-- Adjustable recording duration (por defecto 5 s)
+- Adjustable recording duration (by default 5 s)
 
 ## Requirements
 - Python 3.8 or higher
