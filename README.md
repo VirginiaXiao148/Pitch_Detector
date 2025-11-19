@@ -41,7 +41,7 @@ pip install -r [requirements.txt](http://_vscodecontentref_/0)
 ## Usage
 1. Run the script:
 python musicMaker.py
-2. When prompted, play your instrument for 5 seconds
+2. When prompted, play your instrument at least for 5 seconds
 3. The script will create a MusicXML file that you can open with any sheet music software (like MuseScore, Finale, or Sibelius) or an online MusicXML viewer as SoundSlice
 
 ## Notes
