@@ -141,7 +141,6 @@ with gr.Blocks(title="Pitch Detector: Audio to Note Extractor") as app:
             # Output Section
             result_text = gr.Textbox(label="ℹ️ Status Info")
             download_file = gr.File(label="📥 Download Sheet Music (MusicXML)")
-            # Optional: Show code if needed, or keep it hidden/secondary
             # xml_code = gr.Code(label="XML Content", language="xml") 
 
     # Footer / Limitations
