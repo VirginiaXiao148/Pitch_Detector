@@ -104,21 +104,63 @@ class MusicTranscriber:
 transcriber = MusicTranscriber()
 
 # Create Gradio interface
-app = gr.Interface(
-    fn=transcriber.transcribe_from_file,
+with gr.Blocks(title="Pitch Detector: Audio to Note Extractor") as app:
     
-    inputs=gr.Audio(type="numpy", label="Upload .wav/.mp3 Audio File or record your melody"),
+    # Header and Instructions
+    gr.Markdown(
+        """
+        # 🎵 Pitch Detector: Audio to Note Extractor
+        
+        **Turn your melody into sheet music!** 
+        
+        This tool analyzes your audio file or recording, detects the pitch, and generates a MusicXML file that you can open in MuseScore, Finale, or other notation software.
+        
+        ### 📝 How to use:
+        1. **Upload** an audio file (.wav, .mp3) OR **Record** your melody directly.
+        2. Click **Submit** (or just wait if auto-submit is on).
+        3. **Download** the generated MusicXML file.
+        
+        ### 💡 Tips for best results:
+        - **Single Note Melodies**: This tool works best with monophonic melodies (one note at a time).
+        - **Clear Audio**: Ensure your recording is clear and free of background noise.
+        - **Instrument**: Works well with voice, piano, guitar, etc.
+        """
+    )
     
-    outputs=[
-        gr.Textbox(label="Result"),
-        gr.File(label="Download sheet music (MusicXML)"),
-        gr.Code(label="Sheet Music (MusicXML Content)")
-    ],
-    
-    title="Pitch Detector: Audio to Note Extractor",
-    description="Upload an audio file or record your melody to get the sheet music (MusicXML format)."
-    
-)
+    with gr.Row():
+        with gr.Column(scale=1):
+            # Input Section
+            audio_input = gr.Audio(
+                type="numpy", 
+                label="🎤 Upload or Record",
+                sources=["upload", "microphone"]
+            )
+            submit_btn = gr.Button("🎼 Transcribe", variant="primary")
+        
+        with gr.Column(scale=1):
+            # Output Section
+            result_text = gr.Textbox(label="ℹ️ Status Info")
+            download_file = gr.File(label="📥 Download Sheet Music (MusicXML)")
+            # Optional: Show code if needed, or keep it hidden/secondary
+            # xml_code = gr.Code(label="XML Content", language="xml") 
+
+    # Footer / Limitations
+    with gr.Accordion("⚠️ Limitations & Technical Details", open=False):
+        gr.Markdown(
+            """
+            - **Monophonic Only**: Does not support chords or polyphony.
+            - **Rhythm**: All notes are exported as eighth notes (rhythm agnostic).
+            - **Frequency Range**: Filters out frequencies below 250Hz to focus on melody.
+            - **Accuracy**: Fast passages or complex harmonics might not be perfectly detected.
+            """
+        )
+
+    # Event Listeners
+    submit_btn.click(
+        fn=transcriber.transcribe_from_file,
+        inputs=audio_input,
+        outputs=[result_text, download_file, gr.Code(label="XML Content", visible=False)] # Hidden code output for compatibility if needed, or just remove from return
+    )
 
 
 if __name__ == "__main__":
