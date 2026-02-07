@@ -1,6 +1,6 @@
-import librosa
 import numpy as np
-import music21
+import matplotlib.pyplot as plt
+import librosa
 
 import gradio as gr
 
@@ -11,7 +11,7 @@ class MusicTranscriber:
         The function initializes variables for sample rate in a Python class.
         """
         self.sample_rate = 44100
-        
+    
     def process_audio(self, audio_data):
         # Convert to mono if necessary
         if len(audio_data.shape) > 1:
