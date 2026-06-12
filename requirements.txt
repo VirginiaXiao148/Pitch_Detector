@@ -1,4 +1,3 @@
-gradio
-librosa
-numpy
-music21
+librosa==0.10.1
+numpy>=2.1.0
+librosa>=0.10.2.post1
