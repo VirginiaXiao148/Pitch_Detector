@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import librosa
+import music21
 
 import gradio as gr
 
@@ -33,21 +34,37 @@ class MusicTranscriber:
             if pitch > 250 and pitch < 3000 and np.isfinite(pitch):
                 pitches_found.append(pitch)
                 
-        return pitches_found
+        # Rhythm detection using beat tracking
+        tempo, beats = librosa.beat.beat_track(y=audio_data, 
+                                                sr=self.sample_rate)
+
+        # Combine pitch and rhythm detection
+        notes = []
+        for i in range(len(pitches_found)):
+            note = {
+                'pitch': pitches_found[i],
+                'duration': beats[i] - beats[i-1] if i > 0 else beats[0],
+                'offset': beats[i-1] if i > 0 else 0
+            }
+            notes.append(note)
+
+
+        return notes
     
-    def create_sheet_music(self, pitches):
+    def create_sheet_music(self, notes):
         # Create a music21 stream
         stream = music21.stream.Stream()
         
         # Convert frequencies to notes
-        for pitch in pitches:
+        for note in notes:
             # Convert frequency to midi note number
-            midi_float = librosa.hz_to_midi(pitch)
+            midi_float = librosa.hz_to_midi(note['pitch'])
             midi_note = round(midi_float)
             # Create a music21 note
-            note = music21.note.Note(midi_note)
-            note.duration.quarterLength = 0.5  # Set duration (adjust as needed)
-            stream.append(note)
+            m21_note = music21.note.Note(midi_note)
+            m21_note.duration.quarterLength = note['duration']
+            m21_note.offset = note['offset']
+            stream.append(m21_note)
             
         return stream
     
@@ -148,7 +165,7 @@ with gr.Blocks(title="Pitch Detector: Audio to Note Extractor") as app:
         gr.Markdown(
             """
             - **Monophonic Only**: Does not support chords or polyphony.
-            - **Rhythm**: All notes are exported as eighth notes (rhythm agnostic).
+            - **Rhythm**: Rhythm detection is based on beat tracking.
             - **Frequency Range**: Filters out frequencies below 250Hz to focus on melody.
             - **Accuracy**: Fast passages or complex harmonics might not be perfectly detected.
             """
